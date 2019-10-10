@@ -1,0 +1,118 @@
+<!--
+ * @Autor: ErioY
+ * @Date: 2019-10-01 22:42:53
+ * @Email: 1973545559@qq.com
+ * @Github: https://github.com/ErioY
+ * @LastEditors: ErioY
+ * @LastEditTime: 2019-10-02 10:42:34
+ -->
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>轮播图效果</title>
+    <style>
+    #wrap {
+        width: 500px;
+        height: 500px;
+        overflow: hidden;
+        margin: 10px auto;
+        position: relative;
+    }
+    img {
+        width: 500px;
+        height: 500px;
+    }
+    .nav {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        overflow: hidden;
+    }
+    li {
+        width: 500px;
+        height: 500px;
+        float: left;
+    }
+    #point {
+        width: 90px;
+        height: 12px;
+        position: absolute;
+        left: 300px;
+        bottom: 20px;
+        overflow: hidden;
+    }
+    #point div {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: rgb(217,217,217,0.5);
+        float: left;
+        margin-right: 5px;
+        cursor: pointer;
+        box-sizing: border-box;
+    }
+    .now {
+        background: rgb(255,255,255,0.8);
+        border: 1px rgba(217,217,217, 0.5) solid;
+    }
+     </style>
+ </head>
+ <body>
+    <div id="wrap">
+        <ul class="nav">
+            <li><a href="#"><img src="img/1.jpg" alt=""></a></li>
+            <li><a href="#"><img src="img/2.jpg" alt=""></a></li>
+            <li><a href="#"><img src="img/3.jpg" alt=""></a></li>
+            <li><a href="#"><img src="img/4.jpg" alt=""></a></li>
+            <li><a href="#"><img src="img/5.jpg" alt=""></a></li>
+            <li><a href="#"><img src="img/6.jpg" alt=""></a></li>
+        </ul>
+    </div>
+    <div id="point"></div>
+    <script src = "jquery-1.10.1.min.js"></script>
+    <script src = "velocity.min.js"></script>
+    <script>
+    for (var i = 0; i < $("img").length; i++) {
+        $("<div>").appendTo("#point");
+    }
+    $("#point>div").first().addClass("now");
+    var imgW = $("img").outerWidth();
+    $(".nav").html($(".nav").html() + $(".nav").html()).css("width", imgW * $("img").length);
+    var timer = setInterval(scrollImg, 1500);
+    function scrollImg () {
+        $(".nav").velocity({
+            "left": "-=" + imgW
+        }, {
+            "duration": 700,
+            "complete": function () {
+                if ($(".nav").position().left <= - $(".nav").outerWidth() / 2) {
+                    $(".nav").css("left", 0);
+                }
+            }
+        });
+    }
+
+    $("#wrap").hover(function () {
+        clearInterval(timer);
+    }, function () {
+        timer = setInterval(scrollImg, 1500);
+    });
+    
+    // 鼠标经过小圆点时，显示出对应的图片
+    $("#point>div").hover(function() {
+        clearInterval(timer);
+        $(this).addClass("now").siblings().removeClass("now");
+        var index = $(this).index();
+        $(".nav").css("left", - index * imgW);
+    }, function () {
+        timer = setInterval(scrollImg, 1500);
+    });
+    </script>
+ </body>
+ </html>
